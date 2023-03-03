@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: bank-service
+          uri: lb://bank-service
+          predicates:
+            - Path=/api/bank/**
+          filters:
+            - StripPrefix=2
