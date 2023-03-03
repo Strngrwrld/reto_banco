@@ -2,6 +2,7 @@ package com.gjimenez.bank.controller;
 
 import com.gjimenez.bank.entities.PersonaEntity;
 import com.gjimenez.bank.service.ClientService;
+import com.gjimenez.bank.service.IClienteService;
 import com.gjimenez.bank.utils.ResponseDto;
 import com.gjimenez.bank.bean.PersonaBean;
 import com.gjimenez.bank.entities.ClienteEntity;
@@ -24,52 +25,29 @@ public class ClientController {
     Logger logger = LoggerFactory.getLogger(ClientController.class);
 
     @Autowired
-    ClientService clientService;
+    IClienteService clientService;
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<Object> obtenerPorId(@PathVariable Long id) {
-        ResponseDto<Object> cliente = this.clientService.obtenerPorId(id);
-        return  ResponseEntity.ok(cliente);
+        ResponseDto<Object> result = this.clientService.obtenerPorId(id);
+        return  new ResponseEntity<>(result, HttpStatus.valueOf(result.getCodigo()));
     }
 
     @PostMapping()
-    @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<Object> crear(@Valid @RequestBody PersonaBean personaBean, @RequestHeader Map<String, String> headers){
-        String clientId = headers.get("user");
-        String clave = headers.get("clave");
-
-        ClienteEntity cliente = new ClienteEntity();
-        cliente.setClienteId(clientId);
-        cliente.setClave(clave);
-        cliente.setEstado(true);
-
-
-        PersonaEntity persona = new PersonaEntity();
-        persona.setDireccion(personaBean.getDireccion());
-        persona.setIdentificacion(persona.getIdentificacion());
-        persona.setNombre(personaBean.getNombre());
-        persona.setEdad(personaBean.getEdad());
-        persona.setTelefono(personaBean.getTelefono());
-        persona.setGenero(personaBean.getGenero());
-
-        cliente.setPersonaEntity(persona);
-        persona.setCliente(cliente);
-        this.clientService.guardar(cliente);
-        return  ResponseEntity.ok(new ResponseDto<>(CommonErrors.OK.getMensaje(), CommonErrors.OK.getCodigo()));
+    ResponseEntity<Object> crear(@Valid @RequestBody PersonaBean personaBean,
+                                 @Valid @RequestHeader(required = true) String user,
+                                 @Valid @RequestHeader(required = true) String clave){
+        ResponseDto<Object> result = this.clientService.guardar(personaBean, user, clave);
+        return  new ResponseEntity<>(result, HttpStatus.valueOf(result.getCodigo()));
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     ResponseEntity<String> actualizar(@PathVariable Long id, @Valid @RequestBody PersonaBean personaBean, @RequestHeader Map<String, String> headers){
-        String clientId = headers.get("user");
-        String clave = headers.get("clave");
-        ResponseDto<Object> result = this.clientService.actualizar(personaBean, clientId, clave, id);
+        ResponseDto<Object> result = this.clientService.actualizar(personaBean,headers, id);
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     ResponseEntity<Object> eliminar(@PathVariable Long id){
         ResponseDto<Object> result = this.clientService.eliminarPorId(id);
         return  ResponseEntity.ok(result);

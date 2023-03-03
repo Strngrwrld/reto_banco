@@ -1,5 +1,10 @@
 package com.gjimenez.bank.utils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.gjimenez.bank.entities.PersonaEntity;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseDto<D> {
     public int codigo;
     public String mensaje;
@@ -16,6 +21,30 @@ public class ResponseDto<D> {
     public ResponseDto(String mensaje, int codigo, D data) {
         this.mensaje = mensaje;
         this.codigo = codigo;
+        this.data = data;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+    public D getData() {
+        return data;
+    }
+
+    public void setData(D data) {
         this.data = data;
     }
 }

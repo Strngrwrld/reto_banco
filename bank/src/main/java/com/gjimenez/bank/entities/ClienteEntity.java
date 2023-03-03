@@ -10,7 +10,7 @@ public class ClienteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "clienteId")
+    @Column(name = "clienteId", unique = true)
     private String clienteId;
 
     @Column(name = "clave")
