@@ -1,4 +1,4 @@
-package com.gjimenez.test;
+package com.gjimenez.bank;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +7,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
 @EnableEurekaClient
-@EntityScan({"com.gjimenez.test.entities"})
+@EntityScan({"com.gjimenez.bank.entities"})
 public class BankApplication {
 
 	public static void main(String[] args) {

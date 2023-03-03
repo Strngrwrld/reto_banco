@@ -1,4 +1,4 @@
-package com.gjimenez.test.controller;
+package com.gjimenez.bank.controller;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

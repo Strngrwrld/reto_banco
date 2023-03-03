@@ -1,49 +1,20 @@
-package com.gjimenez.test.entities;
+package com.gjimenez.bank.bean;
 
+import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
-
-@Entity
-@Table(name = "persona")
-public class PersonaEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "nombre")
+public class PersonaBean {
+    @NotBlank(message = "Nombre es requerido")
     private String nombre;
-
-
-    @Column(name = "genero")
+    @NotBlank(message = "Genero es requerido")
     private String genero;
-
-
-    @Column(name = "edad")
+    @NotBlank(message = "Edad es requerido")
     private String edad;
-
-    @Column(name = "identificacion")
+    @NotBlank(message = "Identificacion es requerido")
     private String identificacion;
-
-    @Column(name = "direccion")
+    @NotBlank(message = "Direccion es requerido")
     private String direccion;
-
-    @Column(name = "telefono")
+    @NotBlank(message = "Telefono es requerido")
     private String telefono;
-
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
-    private ClienteEntity cliente;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNombre() {
         return nombre;
@@ -91,13 +62,5 @@ public class PersonaEntity {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    public ClienteEntity getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(ClienteEntity cliente) {
-        this.cliente = cliente;
     }
 }

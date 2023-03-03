@@ -1,4 +1,4 @@
-package com.gjimenez.test.utils;
+package com.gjimenez.bank.utils;
 
 public class ResponseDto<D> {
     public int codigo;

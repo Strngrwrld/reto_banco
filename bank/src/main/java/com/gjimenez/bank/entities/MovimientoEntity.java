@@ -1,4 +1,4 @@
-package com.gjimenez.test.entities;
+package com.gjimenez.bank.entities;
 
 import javax.persistence.*;
 

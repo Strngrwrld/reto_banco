@@ -1,11 +1,11 @@
-package com.gjimenez.test.controller;
+package com.gjimenez.bank.controller;
 
-import com.gjimenez.test.bean.PersonaBean;
-import com.gjimenez.test.entities.ClienteEntity;
-import com.gjimenez.test.entities.PersonaEntity;
-import com.gjimenez.test.service.ClientService;
-import com.gjimenez.test.utils.CommonErrors;
-import com.gjimenez.test.utils.ResponseDto;
+import com.gjimenez.bank.entities.PersonaEntity;
+import com.gjimenez.bank.service.ClientService;
+import com.gjimenez.bank.utils.ResponseDto;
+import com.gjimenez.bank.bean.PersonaBean;
+import com.gjimenez.bank.entities.ClienteEntity;
+import com.gjimenez.bank.utils.CommonErrors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

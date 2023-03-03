@@ -1,10 +1,10 @@
-package com.gjimenez.test.service;
+package com.gjimenez.bank.service;
 
-import com.gjimenez.test.bean.PersonaBean;
-import com.gjimenez.test.entities.ClienteEntity;
-import com.gjimenez.test.repository.IClienteRepository;
-import com.gjimenez.test.utils.CommonErrors;
-import com.gjimenez.test.utils.ResponseDto;
+import com.gjimenez.bank.utils.ResponseDto;
+import com.gjimenez.bank.bean.PersonaBean;
+import com.gjimenez.bank.entities.ClienteEntity;
+import com.gjimenez.bank.repository.IClienteRepository;
+import com.gjimenez.bank.utils.CommonErrors;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 

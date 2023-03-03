@@ -1,20 +1,49 @@
-package com.gjimenez.test.bean;
+package com.gjimenez.bank.entities;
 
-import javax.validation.constraints.NotBlank;
 
-public class PersonaBean {
-    @NotBlank(message = "Nombre es requerido")
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "persona")
+public class PersonaEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "nombre")
     private String nombre;
-    @NotBlank(message = "Genero es requerido")
+
+
+    @Column(name = "genero")
     private String genero;
-    @NotBlank(message = "Edad es requerido")
+
+
+    @Column(name = "edad")
     private String edad;
-    @NotBlank(message = "Identificacion es requerido")
+
+    @Column(name = "identificacion")
     private String identificacion;
-    @NotBlank(message = "Direccion es requerido")
+
+    @Column(name = "direccion")
     private String direccion;
-    @NotBlank(message = "Telefono es requerido")
+
+    @Column(name = "telefono")
     private String telefono;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
+    private ClienteEntity cliente;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNombre() {
         return nombre;
@@ -62,5 +91,13 @@ public class PersonaBean {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public ClienteEntity getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(ClienteEntity cliente) {
+        this.cliente = cliente;
     }
 }

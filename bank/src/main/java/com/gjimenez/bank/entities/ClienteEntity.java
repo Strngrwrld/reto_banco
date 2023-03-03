@@ -1,8 +1,7 @@
-package com.gjimenez.test.entities;
+package com.gjimenez.bank.entities;
 
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "cliente")

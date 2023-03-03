@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "5ff4cac9-8d9b-4d45-b0fd-c10f91089523",
+		"name": "Pichincha",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19236401"
+	},
+	"item": [
+		{
+			"name": "Crear",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "user",
+						"value": "test",
+						"type": "text"
+					},
+					{
+						"key": "clave",
+						"value": "1234",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\":\"Jose\",\n    \"genero\":\"Masculino\",\n    \"edad\":\"22\",\n    \"identificacion\":\"7777777\",\n    \"telefono\": \"99999999\",\n    \"direccion\":\"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8090/api/bank/clientes",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"api",
+						"bank",
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener por id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "user",
+						"value": "test",
+						"type": "text"
+					},
+					{
+						"key": "clave",
+						"value": "1234",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8090/api/bank/clientes/8",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"api",
+						"bank",
+						"clientes",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar por Id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "user",
+						"value": "testt",
+						"type": "text"
+					},
+					{
+						"key": "clave",
+						"value": "1234",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\":\"Josee\",\n    \"genero\":\"Masculino\",\n    \"edad\":\"22\",\n    \"identificacion\":\"7777777\",\n    \"telefono\": \"99999999\",\n    \"direccion\":\"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8090/api/bank/clientes/8",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"api",
+						"bank",
+						"clientes",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Elimitar por id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "user",
+						"value": "test",
+						"type": "text"
+					},
+					{
+						"key": "clave",
+						"value": "1234",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8090/api/bank/clientes/6",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"api",
+						"bank",
+						"clientes",
+						"6"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
