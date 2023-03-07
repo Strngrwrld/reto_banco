@@ -32,17 +32,17 @@ public class ClientService implements  IClienteService {
     }
 
     @Override
-    public ResponseDto<Object> obtenerPorId(Long id) {
+    public ResponseDto<ClienteEntity> obtenerPorId(Long id) {
         try {
 
             Optional<ClienteEntity> clientes = clienteRepository.findByIdAndStatus(id, true);
 
             if(!clientes.isPresent()){
                 logger.info("Client {} not found", id);
-                return new ResponseDto<Object>(CommonErrors.NOT_FOUND.getMensaje(), CommonErrors.NOT_FOUND.getCodigo());
+                return new ResponseDto<>(CommonErrors.NOT_FOUND.getMensaje(), CommonErrors.NOT_FOUND.getCodigo());
             }
 
-            return new ResponseDto<Object>(CommonErrors.OK.getMensaje(), CommonErrors.OK.getCodigo(), clientes.get());
+            return new ResponseDto<ClienteEntity>(CommonErrors.OK.getMensaje(), CommonErrors.OK.getCodigo(), clientes.get());
 
         }catch (Exception e){
 
@@ -117,6 +117,8 @@ public class ClientService implements  IClienteService {
                 .estado(true)
                 .personaEntity(persona)
                 .build();
+
+            persona.setCliente(cliente);
 
         try{
                 ClienteEntity result = this.clienteRepository.save(cliente);

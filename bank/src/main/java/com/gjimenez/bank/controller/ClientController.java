@@ -1,5 +1,6 @@
 package com.gjimenez.bank.controller;
 
+import com.gjimenez.bank.entities.ClienteEntity;
 import com.gjimenez.bank.service.IClienteService;
 import com.gjimenez.bank.utils.ResponseDto;
 import com.gjimenez.bank.bean.PersonaBean;
@@ -23,7 +24,7 @@ public class ClientController {
 
     @GetMapping("/{id}")
     ResponseEntity<Object> obtenerPorId(@PathVariable Long id) {
-        ResponseDto<Object> result = this.clientService.obtenerPorId(id);
+        ResponseDto<ClienteEntity> result = this.clientService.obtenerPorId(id);
         return  new ResponseEntity<>(result, HttpStatus.valueOf(result.getCodigo()));
     }
 

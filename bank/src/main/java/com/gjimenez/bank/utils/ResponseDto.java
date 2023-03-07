@@ -9,6 +9,8 @@ public class ResponseDto<D> {
 
     public D data;
 
+    public ResponseDto() {
+    }
 
     public ResponseDto(String mensaje, int codigo) {
         this.mensaje = mensaje;

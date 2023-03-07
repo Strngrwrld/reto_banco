@@ -37,7 +37,7 @@ public class MovimientoEntity {
     private BigDecimal saldo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "cuenta_id")
     private CuentaEntity cuentaEntity;
 
     public MovimientoEntity() {

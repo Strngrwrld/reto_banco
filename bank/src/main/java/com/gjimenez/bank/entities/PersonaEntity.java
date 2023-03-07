@@ -4,12 +4,14 @@ package com.gjimenez.bank.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 
 @Builder
 @Getter
+@Setter
 @ToString
 @Entity
 @Table(name = "Persona")

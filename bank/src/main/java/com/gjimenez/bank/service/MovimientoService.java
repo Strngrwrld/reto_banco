@@ -1,12 +1,10 @@
 package com.gjimenez.bank.service;
 
-import com.gjimenez.bank.bean.CuentaBean;
 import com.gjimenez.bank.bean.MovimientoBean;
 import com.gjimenez.bank.controller.ClientController;
-import com.gjimenez.bank.entities.ClienteEntity;
+import com.gjimenez.bank.dto.ReportDto;
 import com.gjimenez.bank.entities.CuentaEntity;
 import com.gjimenez.bank.entities.MovimientoEntity;
-import com.gjimenez.bank.repository.ICuentaRepository;
 import com.gjimenez.bank.repository.IMovimientoRepository;
 import com.gjimenez.bank.utils.CommonErrors;
 import com.gjimenez.bank.utils.ResponseDto;
@@ -14,17 +12,14 @@ import com.gjimenez.bank.utils.TipoMovimiento;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 @Service
 public class MovimientoService implements  IMovimientoService {
@@ -60,6 +55,30 @@ public class MovimientoService implements  IMovimientoService {
 
         return procesaMovimiento(movimientoBean, cuenta.getId(), lastMovimiento.getSaldo(), movimientoBean.getValor());
 
+    }
+
+    @Override
+    public ResponseDto<List<ReportDto>> obtenerReporte(Date desde, Date hasta, String clienteId) {
+        BigDecimal saldo = BigDecimal.valueOf(0);
+        try{
+            List<MovimientoEntity> movimiento = this.movimientoRepository.findByFechaBetweenAndCliente(desde, hasta, clienteId);
+
+            List<ReportDto> report = movimiento.stream().map(x -> ReportDto.builder()
+                    .fecha(x.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                    .cliente(x.getCuentaEntity().getCliente().getPersonaEntity().getNombre())
+                    .numeroCuenta(x.getCuentaEntity().getNroCuenta())
+                    .tipo(x.getCuentaEntity().getTipoCuenta())
+                    .estado(x.getEstado())
+                    .saldoInicial(x.getCuentaEntity().getSaldoInicial().toString())
+                    .saldoDisponible(x.getSaldo().toString())
+                    .movimiento(x.getValor().toString()).build()).collect(Collectors.toList());
+
+            return new ResponseDto<>(CommonErrors.CREATED.getMensaje(), CommonErrors.CREATED.getCodigo(), report);
+        }catch (Exception e){
+            logger.info("request fail:  {}", e.getMessage());
+            return new ResponseDto<>(CommonErrors.BAD_REQUEST.getMensaje(), CommonErrors.BAD_REQUEST.getCodigo());
+
+        }
     }
 
     public ResponseDto procesaMovimiento(MovimientoBean movimientoBean,Long cuentaId, BigDecimal saldoInicial, BigDecimal valor){
