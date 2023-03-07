@@ -1,65 +1,48 @@
 package com.gjimenez.bank.entities;
 
 
-import javax.persistence.*;
-import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+
+@Builder
+@Getter
 @Entity
-@Table(name = "cuenta")
+@Table(name = "Cuenta")
 public class CuentaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "numero_cuenta")
+
+    @Column(name = "numero_cuenta", unique = true)
     private String nroCuenta;
 
     @Column(name = "tipo_cuenta")
     private String tipoCuenta;
 
     @Column(name = "saldo_inicial")
-    private Float saldoInicial;
+    private BigDecimal saldoInicial;
 
     @Column(name = "estado")
     private Boolean estado;
 
-    public Long getId() {
-        return id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id")
+    private ClienteEntity cliente;
+
+    public CuentaEntity() {
     }
 
-    public void setId(Long id) {
+    public CuentaEntity(Long id, String nroCuenta, String tipoCuenta, BigDecimal saldoInicial, Boolean estado, ClienteEntity cliente) {
         this.id = id;
-    }
-
-    public String getNroCuenta() {
-        return nroCuenta;
-    }
-
-    public void setNroCuenta(String nroCuenta) {
         this.nroCuenta = nroCuenta;
-    }
-
-    public String getTipoCuenta() {
-        return tipoCuenta;
-    }
-
-    public void setTipoCuenta(String tipoCuenta) {
         this.tipoCuenta = tipoCuenta;
-    }
-
-    public Float getSaldoInicial() {
-        return saldoInicial;
-    }
-
-    public void setSaldoInicial(Float saldoInicial) {
         this.saldoInicial = saldoInicial;
-    }
-
-    public Boolean getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Boolean estado) {
         this.estado = estado;
+        this.cliente = cliente;
     }
 }

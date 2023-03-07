@@ -1,11 +1,20 @@
 package com.gjimenez.bank.entities;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import javax.persistence.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
+@Builder
+@Getter
 @Entity
-@Table(name = "movimiento")
+@Table(name = "Movimiento")
 public class MovimientoEntity {
 
     @Id
@@ -13,58 +22,34 @@ public class MovimientoEntity {
     private Long id;
 
     @Column(name = "fecha")
-    private Date fecha;
+    private LocalDateTime fecha;
 
-    @Column(name = "tipo_movimiento")
+    @Column(name = "tipoMovimiento")
     private String tipoMovimiento;
 
     @Column(name = "valor")
-    private Float valor;
+    private BigDecimal valor;
+
+    @Column(name = "estado")
+    private Boolean estado;
 
     @Column(name = "saldo")
-    private Float saldo;
+    private BigDecimal saldo;
 
-    //@ManyToOne
-    //@JoinColumn(name = "movimiento_id", referencedColumnName = "id")
-    //private CuentaEntity cuenta;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id")
+    private CuentaEntity cuentaEntity;
 
-    public Long getId() {
-        return id;
+    public MovimientoEntity() {
     }
 
-    public void setId(Long id) {
+    public MovimientoEntity(Long id, LocalDateTime fecha, String tipoMovimiento, BigDecimal valor, Boolean estado, BigDecimal saldo, CuentaEntity cuentaEntity) {
         this.id = id;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
         this.fecha = fecha;
-    }
-
-    public String getTipoMovimiento() {
-        return tipoMovimiento;
-    }
-
-    public void setTipoMovimiento(String tipoMovimiento) {
         this.tipoMovimiento = tipoMovimiento;
-    }
-
-    public Float getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(Float saldo) {
-        this.saldo = saldo;
-    }
-
-    public Float getValor() {
-        return valor;
-    }
-
-    public void setValor(Float valor) {
         this.valor = valor;
+        this.estado = estado;
+        this.saldo = saldo;
+        this.cuentaEntity = cuentaEntity;
     }
 }

@@ -1,8 +1,6 @@
 package com.gjimenez.bank.utils;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gjimenez.bank.entities.PersonaEntity;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseDto<D> {

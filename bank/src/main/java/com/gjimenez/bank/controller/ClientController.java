@@ -1,12 +1,8 @@
 package com.gjimenez.bank.controller;
 
-import com.gjimenez.bank.entities.PersonaEntity;
-import com.gjimenez.bank.service.ClientService;
 import com.gjimenez.bank.service.IClienteService;
 import com.gjimenez.bank.utils.ResponseDto;
 import com.gjimenez.bank.bean.PersonaBean;
-import com.gjimenez.bank.entities.ClienteEntity;
-import com.gjimenez.bank.utils.CommonErrors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +17,6 @@ import java.util.Map;
 @Controller
 @RequestMapping("clientes")
 public class ClientController {
-
-    Logger logger = LoggerFactory.getLogger(ClientController.class);
 
     @Autowired
     IClienteService clientService;
@@ -44,13 +38,13 @@ public class ClientController {
     @PutMapping("/{id}")
     ResponseEntity<String> actualizar(@PathVariable Long id, @Valid @RequestBody PersonaBean personaBean, @RequestHeader Map<String, String> headers){
         ResponseDto<Object> result = this.clientService.actualizar(personaBean,headers, id);
-        return new ResponseEntity(result, HttpStatus.OK);
+        return new ResponseEntity(result, HttpStatus.valueOf(result.getCodigo()));
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Object> eliminar(@PathVariable Long id){
-        ResponseDto<Object> result = this.clientService.eliminarPorId(id);
-        return  ResponseEntity.ok(result);
+    ResponseEntity eliminar(@PathVariable Long id){
+        this.clientService.eliminarPorId(id);
+        return ResponseEntity.noContent().build();
     }
 
 

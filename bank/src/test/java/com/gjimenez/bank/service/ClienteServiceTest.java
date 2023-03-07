@@ -32,7 +32,7 @@ public class ClienteServiceTest {
     @Test
     void obtenerPorId_existente_retornaCliente() {
         Long id = 1L;
-        ClienteEntity cliente = new ClienteEntity(id, null, null, true, null);
+        ClienteEntity cliente = ClienteEntity.builder().id(id).estado(true).build();
         when(clienteRepository.findAll(any(Example.class))).thenReturn(Collections.singletonList(cliente));
         ResponseDto<Object> response = clientService.obtenerPorId(id);
         assertEquals(CommonErrors.OK.getMensaje(), response.getMensaje());

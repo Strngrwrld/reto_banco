@@ -11,6 +11,26 @@ public enum CommonErrors {
         public int getCodigo() {
             return 200;
         }
+    },CREATED {
+        @Override
+        public String getMensaje() {
+            return "Operacion exitosa";
+        }
+
+        @Override
+        public int getCodigo() {
+            return 201;
+        }
+    }, SALDO_INSUFICIENTE {
+        @Override
+        public String getMensaje() {
+            return "Saldo insuficiente";
+        }
+
+        @Override
+        public int getCodigo() {
+            return 400;
+        }
     }, NOT_FOUND{
         @Override
         public String getMensaje() {

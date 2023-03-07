@@ -1,19 +1,26 @@
 package com.gjimenez.bank.service;
 
+import com.gjimenez.bank.controller.ClientController;
 import com.gjimenez.bank.entities.PersonaEntity;
 import com.gjimenez.bank.utils.ResponseDto;
 import com.gjimenez.bank.bean.PersonaBean;
 import com.gjimenez.bank.entities.ClienteEntity;
 import com.gjimenez.bank.repository.IClienteRepository;
 import com.gjimenez.bank.utils.CommonErrors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ClientService implements  IClienteService {
+
+    Logger logger = LoggerFactory.getLogger(ClientController.class);
+
     private final IClienteRepository clienteRepository;
 
     public ClientService(IClienteRepository clienteRepository) {
@@ -26,13 +33,22 @@ public class ClientService implements  IClienteService {
 
     @Override
     public ResponseDto<Object> obtenerPorId(Long id) {
-        Example<ClienteEntity> example = Example.of(new ClienteEntity(id, null, null, true, null));
-        List<ClienteEntity> clientes = clienteRepository.findAll(example);
-        if(clientes.isEmpty()){
-            return new ResponseDto<Object>(CommonErrors.NOT_FOUND.getMensaje(), CommonErrors.NOT_FOUND.getCodigo());
-        }
+        try {
 
-        return new ResponseDto<Object>(CommonErrors.OK.getMensaje(), CommonErrors.OK.getCodigo(), clientes.get(0));
+            Optional<ClienteEntity> clientes = clienteRepository.findByIdAndStatus(id, true);
+
+            if(!clientes.isPresent()){
+                logger.info("Client {} not found", id);
+                return new ResponseDto<Object>(CommonErrors.NOT_FOUND.getMensaje(), CommonErrors.NOT_FOUND.getCodigo());
+            }
+
+            return new ResponseDto<Object>(CommonErrors.OK.getMensaje(), CommonErrors.OK.getCodigo(), clientes.get());
+
+        }catch (Exception e){
+
+            logger.error("get request fail:  {}", e.getMessage());
+            return new ResponseDto<>(CommonErrors.NOT_FOUND.getMensaje(), CommonErrors.NOT_FOUND.getCodigo());
+        }
     }
 
     @Override
@@ -41,23 +57,30 @@ public class ClientService implements  IClienteService {
         String clave = headers.get("clave");
 
         ClienteEntity clienteExistente = this.clienteRepository.findById(id).orElse(null);
+
         if(clienteExistente == null){
+            logger.info("Client {} not found", id);
             return new ResponseDto<Object>(CommonErrors.NOT_FOUND.getMensaje(), CommonErrors.NOT_FOUND.getCodigo());
         }
-        clienteExistente.getPersonaEntity().setDireccion(personaBean.getDireccion());
-        clienteExistente.getPersonaEntity().setEdad(personaBean.getEdad());
-        clienteExistente.getPersonaEntity().setGenero(personaBean.getGenero());
-        clienteExistente.getPersonaEntity().setNombre(personaBean.getNombre());
-        clienteExistente.getPersonaEntity().setIdentificacion(personaBean.getIdentificacion());
-        clienteExistente.getPersonaEntity().setTelefono(personaBean.getTelefono());
 
-        clienteExistente.setClienteId(clientId);
-        clienteExistente.setClave(clave);
+        PersonaEntity persona = PersonaEntity.builder()
+                .id(clienteExistente.getPersonaEntity().getId())
+                .direccion(personaBean.getDireccion())
+                .identificacion(personaBean.getIdentificacion())
+                .nombre(personaBean.getNombre())
+                .edad(personaBean.getEdad())
+                .telefono(personaBean.getGenero())
+                .genero(personaBean.getTelefono())
+                .build();
+
+        ClienteEntity clienteActualizado =  ClienteEntity.builder().id(clienteExistente.getId()).clienteId(clientId).clave(clave).personaEntity(persona).build();
 
         try{
-            ClienteEntity result = this.clienteRepository.save(clienteExistente);
+            ClienteEntity result = this.clienteRepository.save(clienteActualizado);
             return new ResponseDto<>(CommonErrors.OK.getMensaje(), CommonErrors.OK.getCodigo(), result);
         }catch (Exception e){
+
+            logger.error("update request fail:  {}", e.getMessage());
             return new ResponseDto<>(CommonErrors.BAD_REQUEST.getMensaje(), CommonErrors.BAD_REQUEST.getCodigo());
 
         }
@@ -69,35 +92,37 @@ public class ClientService implements  IClienteService {
         ClienteEntity clienteExistente = this.clienteRepository.findById(id).orElse(null);
 
         if(clienteExistente == null){
+            logger.info("client {} not found", id);
             return new ResponseDto<Object>(CommonErrors.NOT_FOUND.getMensaje(), CommonErrors.NOT_FOUND.getCodigo());
         }
-        clienteExistente.setEstado(false);
-        this.clienteRepository.save(clienteExistente);
+
+        this.clienteRepository.save(ClienteEntity.builder().id(clienteExistente.getId()).estado(false).build());
         return new ResponseDto<>(CommonErrors.OK.getMensaje(), CommonErrors.OK.getCodigo());
     }
 
     @Override
     public ResponseDto<Object> guardar(PersonaBean personaBean, String clientId, String clave) {
 
-            ClienteEntity cliente = new ClienteEntity();
-            cliente.setClienteId(clientId);
-            cliente.setClave(clave);
-            cliente.setEstado(true);
+            PersonaEntity persona = PersonaEntity.builder()
+                    .direccion(personaBean.getDireccion())
+                    .identificacion(personaBean.getIdentificacion())
+                    .nombre(personaBean.getNombre())
+                    .edad(personaBean.getEdad())
+                    .telefono(personaBean.getTelefono())
+                    .genero(personaBean.getGenero())
+                    .build();
 
-            PersonaEntity persona = new PersonaEntity();
-            persona.setDireccion(personaBean.getDireccion());
-            persona.setIdentificacion(persona.getIdentificacion());
-            persona.setNombre(personaBean.getNombre());
-            persona.setEdad(personaBean.getEdad());
-            persona.setTelefono(personaBean.getTelefono());
-            persona.setGenero(personaBean.getGenero());
+            ClienteEntity cliente = ClienteEntity.builder().clienteId(clientId)
+                .clave(clave)
+                .estado(true)
+                .personaEntity(persona)
+                .build();
 
-            cliente.setPersonaEntity(persona);
-            persona.setCliente(cliente);
-            try{
+        try{
                 ClienteEntity result = this.clienteRepository.save(cliente);
-                return new ResponseDto<>(CommonErrors.OK.getMensaje(), CommonErrors.OK.getCodigo(), result);
+                return new ResponseDto<>(CommonErrors.CREATED.getMensaje(), CommonErrors.CREATED.getCodigo(), result);
             }catch (Exception e){
+            logger.info("save request fail:  {}", e.getMessage());
                 return new ResponseDto<>(CommonErrors.BAD_REQUEST.getMensaje(), CommonErrors.BAD_REQUEST.getCodigo());
 
             }
